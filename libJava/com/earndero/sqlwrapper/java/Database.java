@@ -12,17 +12,13 @@ public class Database implements Closeable {
     Connection connection;
 
     Database(String dbname) throws Exception {
-        String hh = System.getProperty("java.io.tmpdir");
         System.setProperty("org.sqlite.lib.name", "libsqlitejdbc.so");
         final File tmp = new File(System.getProperty("java.io.tmpdir"));
         if (!tmp.exists() || !tmp.isDirectory() || !tmp.canRead() || !tmp.canWrite())
         { throw new Exception("error with tmpDir"); }
-        //SQLiteJDBCLoader.initialize();
-        //Class.forName("org.sqlite.JDBC");
         DriverManager.registerDriver((Driver) Class.forName(
                 "org.sqlite.JDBC").newInstance());
         try {
-            org.sqlite.JDBC j = new org.sqlite.JDBC();
             connection = DriverManager.getConnection("jdbc:sqlite:" + dbname);
             if (connection==null) throw new SQLException();
         } catch (SQLException throwables) {
